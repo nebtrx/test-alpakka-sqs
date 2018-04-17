@@ -1,9 +1,11 @@
 package example
 
+import java.util.UUID
+
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.alpakka.sqs.scaladsl.{SqsAckSink, SqsSink, SqsSource}
-import akka.stream.alpakka.sqs.{MessageAction, SqsSourceSettings}
+import akka.stream.alpakka.sqs.{FifoQueue, MessageAction, SqsSourceSettings}
 import akka.stream.scaladsl.Source
 import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
@@ -81,7 +83,10 @@ object Producer extends App {
   private def pushMsg(msg: String): SendMessageRequest = {
     val now = System.currentTimeMillis()
     val body = s"$counter $msg at $now"
-    val f = new SendMessageRequest().withMessageBody(body)
+    val f = new SendMessageRequest()
+      .withMessageBody(body)
+      .withMessageGroupId("blaa")
+      .withMessageDeduplicationId(UUID.randomUUID.toString)
     println(s"::::: MESSAGE PRODUCED")
     println(s"$body")
     println(s"::::: _______________")
