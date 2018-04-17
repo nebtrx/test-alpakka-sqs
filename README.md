@@ -7,4 +7,5 @@ using [Alpakka](https://github.com/akka/alpakka) [AWS SQS Connector](https://dev
 ### Usage
 
 1. `$ cp .env.sample .env` and replace the placeholders with the proper values
-1. `$ source .env && sbt run`
+1. Start the consumer: `$ source .env & sbt "runMain example.Consumer"`
+1. Start the producer: `$ source .env & sbt "runMain example.Producer"`
